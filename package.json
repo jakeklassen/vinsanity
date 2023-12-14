@@ -14,6 +14,8 @@
 		"lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" .eslintrc.cjs jest.config.cjs",
 		"watch": "tsc --watch",
 		"create-order": "node --import tsx --env-file=.env src/create-order.ts",
+		"create-order-with-tax-surplus": "node --import tsx --env-file=.env src/create-order.ts --order-template=orders/order-with-tax-surplus.json",
+		"create-order-with-tax-deficit": "node --import tsx --env-file=.env src/create-order.ts --order-template=orders/order-with-tax-deficit.json",
 		"start": "tsx src",
 		"prod": "node dist"
 	},
