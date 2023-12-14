@@ -1,0 +1,20 @@
+{
+	"offers": [
+		{
+			"offer_id": 16,
+			"quantity": 1
+		}
+	],
+	"billing": {
+		"address_1": "3001 Las Vegas Blvd S",
+		"city": "Las Vegas",
+		"state": "NV",
+		"zip_code": "89109"
+	},
+	"shipping": {
+		"address_1": "377 Keahole St",
+		"city": "Honolulu",
+		"state": "HI",
+		"zip_code": "96825"
+	}
+}

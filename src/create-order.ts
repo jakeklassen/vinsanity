@@ -19,6 +19,12 @@ type OrderTemplate = {
 		state: string;
 		zip_code: string;
 	};
+	shipping?: {
+		address_1: string;
+		city: string;
+		state: string;
+		zip_code: string;
+	};
 };
 
 const args = parseArgs({
@@ -90,6 +96,9 @@ const orderTemplate: OrderTemplate = JSON.parse(
 	await page.goto(`${processEnv.ECOM_HOST}/cart`);
 	await page.locator('a[href="/checkout"]').click();
 
+	const firstName = randFirstName();
+	const lastName = randLastName();
+
 	await page.locator('input[type="email"]').fill(
 		randEmail({
 			provider: 'example',
@@ -97,8 +106,8 @@ const orderTemplate: OrderTemplate = JSON.parse(
 		}),
 	);
 
-	await page.locator('input[id="first-name"]').fill(randFirstName());
-	await page.locator('input[id="last-name"]').fill(randLastName());
+	await page.locator('input[id="first-name"]').fill(firstName);
+	await page.locator('input[id="last-name"]').fill(lastName);
 	await page
 		.locator('input[id="address-1"]')
 		.fill(orderTemplate.billing.address_1);
@@ -117,6 +126,50 @@ const orderTemplate: OrderTemplate = JSON.parse(
 
 	await page.locator('input[type="tel"]').fill('702-733-1957');
 	await page.locator('input[type="password"]').fill('asdfasdf');
+
+	if (orderTemplate.shipping != null) {
+		await page.keyboard.press('Tab');
+
+		// Trigger shipping to different address checkbox
+		await page.keyboard.press('Space');
+		await page.keyboard.press('Tab');
+
+		// First name
+		await page.keyboard.type(firstName);
+		await page.keyboard.press('Tab');
+
+		// Last name
+		await page.keyboard.type(lastName);
+		await page.keyboard.press('Tab');
+
+		// Skip company name
+		await page.keyboard.press('Tab');
+
+		// Skip Country
+		await page.keyboard.press('Tab');
+
+		// Street address
+		await page.keyboard.type(orderTemplate.shipping.address_1);
+		await page.keyboard.press('Tab');
+
+		// Skip apartment
+		await page.keyboard.press('Tab');
+
+		// City
+		await page.keyboard.type(orderTemplate.shipping.city);
+		await page.keyboard.press('Tab');
+
+		// State
+		const stateElement = await page.evaluateHandle(
+			() => document.activeElement as HTMLSelectElement,
+		);
+		await stateElement.select(orderTemplate.shipping.state);
+
+		await page.keyboard.press('Tab');
+
+		// Zip code
+		await page.keyboard.type(orderTemplate.shipping.zip_code);
+	}
 
 	// wait for input[id="credit-card-number"] within iframe
 	await page.waitForSelector('iframe[name="braintree-hosted-field-number"]');
