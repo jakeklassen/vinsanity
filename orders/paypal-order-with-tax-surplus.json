@@ -1,0 +1,22 @@
+{
+	"offers": [
+		{
+			"offer_id": 16,
+			"quantity": 10
+		},
+		{
+			"offer_id": 28,
+			"quantity": 10
+		},
+		{
+			"offer_id": 14,
+			"quantity": 1
+		}
+	],
+	"billing": {
+		"address_1": "3001 Las Vegas Blvd S",
+		"city": "Las Vegas",
+		"state": "NV",
+		"zip_code": "89109"
+	}
+}
