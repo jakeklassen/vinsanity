@@ -16,7 +16,7 @@
 		"create-order": "node --import tsx --env-file=.env src/create-order.ts",
 		"create-order-with-tax-surplus": "node --import tsx --env-file=.env src/create-order.ts --order-template=orders/order-with-tax-surplus.json",
 		"create-order-with-tax-deficit": "node --import tsx --env-file=.env src/create-order.ts --order-template=orders/order-with-tax-deficit.json",
-		"create-paypal-order-with-tax-surplus": "node --import tsx --env-file=.env src/create-order.ts --order-template=orders/paypal-order-with-tax-surplus.json",
+		"create-paypal-order-with-tax-deficit": "node --import tsx --env-file=.env src/create-order.ts --order-template=orders/paypal-order-with-tax-deficit.json",
 		"start": "tsx src",
 		"prod": "node dist"
 	},
