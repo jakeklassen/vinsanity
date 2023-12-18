@@ -5,6 +5,10 @@
 			"quantity": 10
 		},
 		{
+			"offer_id": 28,
+			"quantity": 1
+		},
+		{
 			"offer_id": 14,
 			"quantity": 1
 		}
@@ -14,5 +18,11 @@
 		"city": "Las Vegas",
 		"state": "NV",
 		"zip_code": "89109"
+	},
+	"shipping": {
+		"address_1": "377 Keahole St",
+		"city": "Honolulu",
+		"state": "HI",
+		"zip_code": "96825"
 	}
 }
