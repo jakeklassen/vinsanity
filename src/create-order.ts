@@ -5,6 +5,7 @@ import { randEmail, randFirstName, randLastName } from '@ngneat/falso';
 import axios from 'axios';
 import { execa } from 'execa';
 import { readFile } from 'node:fs/promises';
+import https from 'node:https';
 import { parseArgs } from 'node:util';
 import puppeteer from 'puppeteer';
 
@@ -51,6 +52,13 @@ const orderTemplate: OrderTemplate = JSON.parse(
 );
 
 (async () => {
+	const instance = axios.create({
+		baseURL: processEnv.ECOM_HOST,
+		httpsAgent: new https.Agent({
+			rejectUnauthorized: false,
+		}),
+	});
+
 	const browser = await puppeteer.launch({
 		// headless: 'new',
 		headless: false,
@@ -79,8 +87,8 @@ const orderTemplate: OrderTemplate = JSON.parse(
 		.join('; ');
 
 	for (const offer of orderTemplate.offers) {
-		await axios.post(
-			`${processEnv.ECOM_HOST}/api/cart/offer`,
+		await instance.post(
+			'/api/cart/offer',
 			{ offer_id: offer.offer_id, quantity: offer.quantity },
 			{
 				headers: {
