@@ -30,14 +30,14 @@
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
-		"@types/eslint": "8.44.9",
+		"@types/eslint": "8.56.0",
 		"@types/node": "^20.10.5",
 		"@typescript-eslint/eslint-plugin": "6.15.0",
 		"@typescript-eslint/parser": "6.15.0",
 		"comment-json": "4.2.3",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "9.1.0",
-		"eslint-plugin-prettier": "5.0.1",
+		"eslint-plugin-prettier": "5.1.0",
 		"expect": "29.7.0",
 		"prettier": "3.1.1",
 		"shx": "0.3.4",

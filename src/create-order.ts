@@ -9,6 +9,11 @@ import { parseArgs } from 'node:util';
 import puppeteer from 'puppeteer';
 
 type OrderTemplate = {
+	user_details?: {
+		first_name?: string;
+		last_name?: string;
+		email?: string;
+	};
 	offers: Array<{
 		offer_id: number;
 		quantity: number;
@@ -98,13 +103,14 @@ const orderTemplate: OrderTemplate = JSON.parse(
 
 	const firstName = randFirstName();
 	const lastName = randLastName();
-
-	await page.locator('input[type="email"]').fill(
+	const email =
+		orderTemplate.user_details?.email ??
 		randEmail({
 			provider: 'example',
 			suffix: 'com',
-		}),
-	);
+		});
+
+	await page.locator('input[type="email"]').fill(email);
 
 	await page.locator('input[id="first-name"]').fill(firstName);
 	await page.locator('input[id="last-name"]').fill(lastName);
@@ -258,6 +264,8 @@ const orderTemplate: OrderTemplate = JSON.parse(
 
 			return Array.from(new Set(orderIds));
 		});
+
+	console.log('User email:', email);
 
 	for (const orderId of orderIds) {
 		const transactionRef = await execa(
