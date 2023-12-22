@@ -38,6 +38,10 @@ const args = parseArgs({
 		'order-template': {
 			type: 'string',
 		},
+		'with-fraud': {
+			type: 'boolean',
+			default: false,
+		},
 	},
 });
 
@@ -111,12 +115,19 @@ const orderTemplate: OrderTemplate = JSON.parse(
 
 	const firstName = randFirstName();
 	const lastName = randLastName();
-	const email =
+	let email =
 		orderTemplate.user_details?.email ??
 		randEmail({
 			provider: 'example',
 			suffix: 'com',
 		});
+
+	// Add +review to email address to trigger fraud
+	if (args.values['with-fraud']) {
+		const [emailPrefix, emailSuffix] = email.split('@');
+
+		email = `${emailPrefix}+review@${emailSuffix}`;
+	}
 
 	await page.locator('input[type="email"]').fill(email);
 
@@ -276,32 +287,35 @@ const orderTemplate: OrderTemplate = JSON.parse(
 	console.log('User email:', email);
 
 	for (const orderId of orderIds) {
-		const transactionRef = await execa(
-			`${processEnv.ECOM_PATH}/vendor/bin/sail`,
-			[
-				'art',
-				'tink',
-				`--execute=use App\\Models\\Order; echo Order::find(${orderId})->payments()->first()->transaction_ref;`,
-			],
-			{
-				cwd: processEnv.ECOM_PATH,
-			},
-		).then((res) => res.stdout);
+		if (!args.values['with-fraud']) {
+			const transactionRef = await execa(
+				`${processEnv.ECOM_PATH}/vendor/bin/sail`,
+				[
+					'art',
+					'tink',
+					`--execute=use App\\Models\\Order; echo Order::find(${orderId})->payments()->first()->transaction_ref;`,
+				],
+				{
+					cwd: processEnv.ECOM_PATH,
+				},
+			).then((res) => res.stdout);
 
-		if (transactionRef === '') {
-			console.log('Transaction ref not found for order', orderId);
-			continue;
+			if (transactionRef === '') {
+				console.log('Transaction ref not found for order', orderId);
+				continue;
+			}
+
+			const settleResult = await execa(
+				`${processEnv.ECOM_PATH}/vendor/bin/sail`,
+				['art', 'test:transaction:settle', transactionRef],
+				{
+					cwd: processEnv.ECOM_PATH,
+				},
+			).then((res) => res.stdout);
+
+			console.log(settleResult);
 		}
 
-		const settleResult = await execa(
-			`${processEnv.ECOM_PATH}/vendor/bin/sail`,
-			['art', 'test:transaction:settle', transactionRef],
-			{
-				cwd: processEnv.ECOM_PATH,
-			},
-		).then((res) => res.stdout);
-
-		console.log(settleResult);
 		console.log(
 			`Order can be viewed at ${processEnv.ECOM_HOST}/nova/resources/orders/${orderId}`,
 		);
