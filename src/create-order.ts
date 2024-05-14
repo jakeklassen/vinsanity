@@ -299,7 +299,7 @@ const orderTemplate: OrderTemplate = JSON.parse(
 			const transactionRef = await execa(
 				command,
 				[
-					'art',
+					'artisan',
 					'tink',
 					`--execute=use App\\Models\\Order; echo Order::find(${orderId})->payments()->first()->transaction_ref;`,
 				],
@@ -315,7 +315,7 @@ const orderTemplate: OrderTemplate = JSON.parse(
 
 			const settleResult = await execa(
 				command,
-				['art', 'test:transaction:settle', transactionRef],
+				['artisan', 'test:transaction:settle', transactionRef],
 				{
 					cwd: processEnv.ECOM_PATH,
 				},
