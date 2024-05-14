@@ -90,6 +90,9 @@ const orderTemplate: OrderTemplate = JSON.parse(
 		.map((cookie) => `${cookie.name}=${cookie.value}`)
 		.join('; ');
 
+	console.log('Order template:');
+	console.log(orderTemplate);
+
 	for (const offer of orderTemplate.offers) {
 		await instance.post(
 			'/api/cart/offer',
@@ -288,8 +291,13 @@ const orderTemplate: OrderTemplate = JSON.parse(
 
 	for (const orderId of orderIds) {
 		if (!args.values['with-fraud']) {
+			const command =
+				processEnv.SAIL === 'true'
+					? `${processEnv.ECOM_PATH}/vendor/bin/sail`
+					: 'php';
+
 			const transactionRef = await execa(
-				`${processEnv.ECOM_PATH}/vendor/bin/sail`,
+				command,
 				[
 					'art',
 					'tink',
@@ -306,7 +314,7 @@ const orderTemplate: OrderTemplate = JSON.parse(
 			}
 
 			const settleResult = await execa(
-				`${processEnv.ECOM_PATH}/vendor/bin/sail`,
+				command,
 				['art', 'test:transaction:settle', transactionRef],
 				{
 					cwd: processEnv.ECOM_PATH,

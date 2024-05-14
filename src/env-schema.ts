@@ -3,6 +3,7 @@ import z from 'zod';
 const envSchema = z.object({
 	ECOM_HOST: z.string().url(),
 	ECOM_PATH: z.string(),
+	SAIL: z.string(),
 });
 
 export const processEnv = envSchema.parse(process.env);
