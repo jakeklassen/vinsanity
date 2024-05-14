@@ -11,7 +11,7 @@
 	"scripts": {
 		"prebuild": "shx rm -rf dist",
 		"build": "tsc -p tsconfig.build.json",
-		"lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" .eslintrc.cjs jest.config.cjs",
+		"lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" .eslintrc.cjs",
 		"watch": "tsc --watch",
 		"create-order": "node --import tsx --env-file=.env src/create-order.ts",
 		"create-order-with-tax-surplus": "node --import tsx --env-file=.env src/create-order.ts --order-template=orders/order-with-tax-surplus.json",
@@ -24,16 +24,16 @@
 	"dependencies": {
 		"@ngneat/falso": "^7.2.0",
 		"axios": "^1.6.8",
-		"execa": "^8.0.1",
+		"execa": "^9.1.0",
 		"p-map": "^7.0.2",
-		"puppeteer": "^21.10.0",
+		"puppeteer": "^22.8.1",
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
 		"@types/eslint": "8.56.10",
 		"@types/node": "^20.12.12",
-		"@typescript-eslint/eslint-plugin": "6.20.0",
-		"@typescript-eslint/parser": "6.20.0",
+		"@typescript-eslint/eslint-plugin": "7.9.0",
+		"@typescript-eslint/parser": "7.9.0",
 		"comment-json": "4.2.3",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "9.1.0",
